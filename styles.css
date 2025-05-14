@@ -194,11 +194,11 @@ heade {
   font-size: 1.3rem;
   font-weight: bold;
 }
-.table-container {
+//.table-container {
   margin: 2rem auto;
   max-width: 800px;
   width: 100%;
   overflow-x: auto;
-  text-align: center;
-  margin-top: 1rem;
+//  text-align: center;
+  //margin-top: 1rem;
 }
