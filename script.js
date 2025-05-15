@@ -30,7 +30,7 @@
       // Add Shared and Full options for Rice
       quantitySelect.innerHTML = `
         <option value="Shared" selected>Shared</option>
-        <option value="Full">Full</option>
+        <option value="60">Full</option>
       `;
     } else if (this.value === 'No Food') {
       // Add No Food option
