@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price Management</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Price Management</h1>
+  </header>
+  <div class="container">
+    <form id="price-form">
+      <!-- Always visible price input for Shared Rice -->
+      <h3>Rice Prices</h3>
+      <label for="rice-shared-price">Rice (Shared) Price:</label>
+      <input type="number" id="rice-shared-price" name="rice-shared-price" placeholder="Enter price for Rice (Shared)" required>
+
+      <!-- Dropdown for other items -->
+      <h3>Update Other Items</h3>
+      <label for="item-dropdown">Select Item to Update:</label>
+      <select id="item-dropdown" name="item-dropdown">
+        <option value="" disabled selected>Select an item</option>
+        <option value="Chapati">Chapati</option>
+        <option value="Poratta">Poratta</option>
+        <option value="Rice (Full)">Rice (Full)</option>
+        <option value="Idiyappam">Idiyappam</option>
+        <option value="Puttu">Puttu</option>
+        <option value="Dhosha">Dhosha</option>
+        <option value="Appam">Appam</option>
+        <option value="Special">Special</option>
+      </select>
+
+      <!-- Price input for selected item -->
+      <div id="item-price-container" style="display: none;">
+        <label for="item-price">Enter New Price:</label>
+        <input type="number" id="item-price" name="item-price" placeholder="Enter new price">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit">Save Prices</button>
+    </form>
+
+    <!-- Add New Student Section -->
+    <h3>Add New Student</h3>
+    <form id="add-student-form">
+      <label for="student-name">Student Name:</label>
+      <input type="text" id="student-name" name="student-name" placeholder="Enter student name" required>
+      <button type="submit">Add Student</button>
+    </form>
+  </div>
+
+  <script>
+    // Fetch current prices
+    async function fetchPrices() {
+      const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL?type=getPrices');
+      const data = await response.json();
+
+      // Populate the shared rice price field
+      document.getElementById('rice-shared-price').value = data.riceShared || '';
+    }
+
+    // Show price input for selected item
+    document.getElementById('item-dropdown').addEventListener('change', (event) => {
+      const selectedItem = event.target.value;
+      const itemPriceContainer = document.getElementById('item-price-container');
+      const itemPriceInput = document.getElementById('item-price');
+
+      if (selectedItem) {
+        itemPriceContainer.style.display = 'block';
+        itemPriceInput.placeholder = `Enter price for ${selectedItem}`;
+      } else {
+        itemPriceContainer.style.display = 'none';
+        itemPriceInput.value = ''; // Clear input when no item is selected
+      }
+    });
+
+    // Save prices
+    document.getElementById('price-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const riceSharedPrice = document.getElementById('rice-shared-price').value;
+      const selectedItem = document.getElementById('item-dropdown').value;
+      const itemPrice = document.getElementById('item-price').value;
+
+      // Prepare the payload
+      const prices = {
+        riceShared: riceSharedPrice,
+      };
+
+      if (selectedItem && itemPrice) {
+        prices[selectedItem.toLowerCase()] = itemPrice; // Add the selected item's price
+      }
+
+      // Send the updated prices to the server
+      const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'setPrices',
+          prices,
+        }),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+    });
+
+    // Add new student
+    document.getElementById('add-student-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const studentName = document.getElementById('student-name').value;
+
+      // Send the new student name to the server
+      const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'addStudent',
+          studentName,
+        }),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+    });
+
+    // Fetch prices on page load
+    fetchPrices();
+  </script>
+</body>
+</html>

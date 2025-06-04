@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Admin Login</h1>
+  </header>
+  <div class="container">
+    <form id="login-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+   /* document.getElementById('login-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycby1yCj7aBc5is5oyS1ISz1cFVp2ColI2V0kYczjAaUSt5ZtufRXKaO_kZT7eSRU1a2Vvw/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'login', username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    if (result.status === 'success') {
+      alert(result.message);
+      window.location.href = 'price-management.html'; // Redirect to price management page
+    } else {
+      alert(`Error: ${result.message}`);
+    }
+  } catch (error) {
+    console.error('Error during fetch:', error);
+    alert('Failed to connect to the server. Please try again later.');
+  }
+});*/
+  document.getElementById('login-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Hardcoded admin credentials
+    const adminUsername = 'admin';
+    const adminPassword = 'password123';
+
+    // Get input values
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Validate credentials
+    if (username === adminUsername && password === adminPassword) {
+      alert('Login successful!');
+      window.location.href = 'price-management.html'; // Redirect to price management page
+    } else {
+      alert('Invalid username or password. Please try again.');
+    }
+  });
+</script>
+  
+</body>
+</html>
